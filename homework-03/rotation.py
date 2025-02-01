@@ -7,7 +7,7 @@ from quaternion import Quaternion
 from numbers import Number
 
 class Rotation:
-    def __init__(self, axis:str=None, angle:int|float=None, rotation_matrix:np.matrix[np.Any, np.Any]=None, quaternion:Quaternion=None, radians:bool=True) -> None:
+    def __init__(self, axis:str=None, angle:int|float=None, rotation_matrix:np.matrix[int|float, int|float]=None, quaternion:Quaternion=None, radians:bool=True) -> None:
         """
         The arguments should be in one of three forms:
             One:Number
@@ -32,7 +32,7 @@ class Rotation:
         else:
             raise ValueError
 
-    def generate_rotation_matrix(axis:str, angle:int|float, radians=True) -> np.matrix[np.Any, np.Any]:
+    def generate_rotation_matrix(axis:str, angle:int|float, radians=True) -> np.matrix[float, float]:
         """
         Generates a rotation angle from the provided axis and angle. 
         Assumes angle is in radians unless radians=False.
@@ -47,21 +47,21 @@ class Rotation:
 
         if axis == "x":
             return np.matrix([
-                [ 1,         0,          0 ],
-                [ 0, angle_cos, -angle_sin ], 
-                [ 0, angle_sin, angle_cos  ]
+                [ 1.,        0.,         0. ],
+                [ 0., angle_cos, -angle_sin ], 
+                [ 0., angle_sin, angle_cos  ]
             ])
         elif axis == "y":
             return np.matrix([
-                [ angle_cos,  0, angle_sin ],
-                [ 0,          1,         0 ], 
-                [ -angle_sin, 0, angle_cos ]
+                [ angle_cos,  0., angle_sin  ],
+                [ 0.,         1.,         0. ], 
+                [ -angle_sin, 0., angle_cos  ]
             ])
         elif axis == "z":
             return np.matrix([
-                [ angle_cos, -angle_sin, 0 ],
-                [ angle_sin, angle_cos,  0 ], 
-                [ 0,         0,          1 ]
+                [ angle_cos, -angle_sin,  0. ],
+                [ angle_sin, angle_cos,   0. ], 
+                [ 0.,        0.,          1. ]
             ])
         else:
             raise ValueError("Expected axis x, y, or z")
