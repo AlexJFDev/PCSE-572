@@ -19,9 +19,9 @@ class Rotation:
             self.angle = angle
             self.rotation_matrix = Rotation.generate_rotation_matrix(axis, angle, raidians=False)
         elif rotation_matrix is not None:
-            self.rotation_matrix = rotation_matrix
+            raise NotImplementedError
         elif quaternion is not None:
-            self.quaternion = quaternion
+            raise NotImplementedError
         else:
             raise ValueError
 
@@ -58,3 +58,6 @@ class Rotation:
             ]
         else:
             raise ValueError
+
+        def generate_rotation_quaterion(axis, angle, radians=True):
+            pass
