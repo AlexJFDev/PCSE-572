@@ -3,11 +3,14 @@ import numpy as np
 
 from quaternion import Quaternion
 
+# For typing
+from numbers import Number
+
 class Rotation:
-    def __init__(self, axis=None, angle=None, rotation_matrix=None, quaternion=None, radians=True):
+    def __init__(self, axis:str=None, angle:int|float=None, rotation_matrix:np.matrix[np.Any, np.Any]=None, quaternion:Quaternion=None, radians:bool=True) -> None:
         """
         The arguments should be in one of three forms:
-            One:
+            One:Number
                 axis should be a string, "x", "y", or "z".
                 angle is a number.
             Two:
@@ -29,7 +32,7 @@ class Rotation:
         else:
             raise ValueError
 
-    def generate_rotation_matrix(axis, angle, radians=True):
+    def generate_rotation_matrix(axis:str, angle:int|float, radians=True) -> np.matrix[np.Any, np.Any]:
         """
         Generates a rotation angle from the provided axis and angle. 
         Assumes angle is in radians unless radians=False.
@@ -63,7 +66,7 @@ class Rotation:
         else:
             raise ValueError("Expected axis x, y, or z")
 
-    def generate_rotation_quaternion(axis, angle, radians=True):
+    def generate_rotation_quaternion(axis:str, angle:int|float, radians=True) -> Quaternion:
         """
         Generates a rotation quaternion from the provided axis and angle. 
         Assumes angle is in radians unless radians=False.
