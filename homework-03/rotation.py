@@ -1,6 +1,8 @@
 import math
 import numpy as np
 
+from quaternion import Quaternion
+
 class Rotation:
     def __init__(self, axis=None, angle=None, rotation_matrix=None, quaternion=None, radians=True):
         """
@@ -18,7 +20,8 @@ class Rotation:
         if axis in {"x", "y", "z"} and angle is not None:
             self.axis = axis
             self.angle = angle
-            self.rotation_matrix = Rotation.generate_rotation_matrix(axis, angle, raidians=False)
+            self.rotation_matrix: np.matrix[np.Any, np.Any] = Rotation.generate_rotation_matrix(axis, angle, radians=radians)
+            self.rotation_quaternion = Rotation.generate_rotation_quaternion(axis, angle, radians=radians)
         elif rotation_matrix is not None:
             raise NotImplementedError
         elif quaternion is not None:
@@ -58,7 +61,26 @@ class Rotation:
                 [ 0,         0,          1 ]
             ])
         else:
-            raise ValueError
+            raise ValueError("Expected axis x, y, or z")
 
-        def generate_rotation_quaterion(axis, angle, radians=True):
-            pass
+    def generate_rotation_quaternion(axis, angle, radians=True):
+        """
+        Generates a rotation quaternion from the provided axis and angle. 
+        Assumes angle is in radians unless radians=False.
+        """
+        if radians:
+            angle_radians = angle
+        else:
+            angle_radians = math.radians(angle)
+
+        angle_cos = math.cos(2 / angle_radians)
+        angle_sin = math.cos(2 / angle_radians)
+
+        if axis == "x":
+            return Quaternion(angle_cos, angle_sin, 0, 0)
+        elif axis == "y":
+            return Quaternion(angle_cos, 0, angle_sin, 0)
+        elif axis == "z":
+            return Quaternion(angle_cos, 0, 0, angle_sin)
+        else:
+            raise ValueError("Expected axis x, y, or z")
