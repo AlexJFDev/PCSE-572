@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 class Rotation:
     def __init__(self, axis=None, angle=None, rotation_matrix=None, quaternion=None, radians=True):
@@ -39,23 +40,23 @@ class Rotation:
         angle_sin = math.cos(angle_radians)
 
         if axis == "x":
-            return [
+            return np.matrix([
                 [ 1,         0,          0 ],
                 [ 0, angle_cos, -angle_sin ], 
                 [ 0, angle_sin, angle_cos  ]
-            ]
+            ])
         elif axis == "y":
-            return [
+            return np.matrix([
                 [ angle_cos,  0, angle_sin ],
                 [ 0,          1,         0 ], 
                 [ -angle_sin, 0, angle_cos ]
-            ]
+            ])
         elif axis == "z":
-            return [
+            return np.matrix([
                 [ angle_cos, -angle_sin, 0 ],
                 [ angle_sin, angle_cos,  0 ], 
                 [ 0,         0,          1 ]
-            ]
+            ])
         else:
             raise ValueError
 
