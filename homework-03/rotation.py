@@ -13,6 +13,11 @@ AXIS_TABLE: dict[str, tuple[float, float, float]] = {
 }
 
 class Rotation:
+    axis: float
+    angle: float
+    rotation_matrix: np.matrix[float]
+    rotation_quaternion: Quaternion
+
     def __init__(
             self,
             axis: Optional[str|list[int|float]]=None,
