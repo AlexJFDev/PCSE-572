@@ -10,11 +10,12 @@ class Transformation:
         self.translation = np.array(translation)
         self.rotation = rotation
 
-        partial_transform = np.vstack(self.rotation.rotation_matrix, self.translation)
-        self.transformation_matrix = np.hstack((partial_transform, np.array([0, 0, 0, 1])))
+        self.transformation_matrix = np.eye(4)
+        self.transformation_matrix[:3, :3] = self.rotation.rotation_matrix
+        self.transformation_matrix[:3, 3] = self.translation
         
-        def __mul__(self, other):
-            new_transformation = self.transformation_matrix @ other.transformation_matrix
-            new_translation = new_transformation[:3, 3]
-            new_rotation = Rotation(new_transformation[:3, :3])
-            return Transformation(new_translation, new_rotation)
+    def __mul__(self, other):
+        new_transformation = self.transformation_matrix @ other.transformation_matrix
+        new_rotation = Rotation(new_transformation[:3, :3])
+        new_translation = new_transformation[:3, 3]
+        return Transformation(new_translation, new_rotation)
