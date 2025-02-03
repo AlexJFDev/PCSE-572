@@ -63,7 +63,7 @@ class Rotation:
             if new_axis in AXIS_TABLE.keys():
                 new_axis = AXIS_TABLE[new_axis]
             else:
-                raise ValueError('Axis should either be a list of 3 numbers or a string "x" "y" or "z"')
+                raise ValueError('Axis should either be a list or tuple of 3 numbers or a string "x" "y" or "z"')
         else:
             if len(axis) != 3:
                 raise ValueError("Length of axis should be 3")
