@@ -41,7 +41,6 @@ class Rotation:
             raise ValueError(f"radians should be a boolean")
         # axis and angle
         if (axis is not None and angle is not None) and (rotation_matrix is None and rotation_quaternion is None):
-            # Validate axis
             self.angle = Rotation.__validate_angle(angle)
             self.axis = Rotation.__validate_axis(axis)
             self.rotation_matrix = Rotation.__axis_angle_to_rotation_matrix(self.axis, self.angle, radians=radians)
@@ -53,10 +52,8 @@ class Rotation:
         # Quaternion
         elif (rotation_quaternion is not None) and (axis is None and angle is None and rotation_matrix is None):
             self.rotation_quaternion = Rotation.__validate_rotation_quaternion(rotation_quaternion)
-
             self.axis, self.angle = Rotation.__rotation_quaternion_to_axis_angle(self.rotation_quaternion)
-            self.rotation_matrix = Rotation.__rotation_quaternion_to_rotation_matrix(self.axis, self.angle, radians=radians)
-            raise NotImplementedError("TODO")
+            self.rotation_matrix = Rotation.__rotation_quaternion_to_rotation_matrix(self.rotation_quaternion)
         else:
             raise ValueError("Please provide an axis and angle, or a rotation matrix, or a quaternion. Do not provide any other combination.")
         
