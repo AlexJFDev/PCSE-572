@@ -16,6 +16,6 @@ class Transformation:
         
     def __mul__(self, other):
         new_transformation = self.transformation_matrix @ other.transformation_matrix
-        new_rotation = Rotation(new_transformation[:3, :3])
+        new_rotation = Rotation(rotation_matrix=new_transformation[:3, :3])
         new_translation = new_transformation[:3, 3]
         return Transformation(new_translation, new_rotation)
