@@ -5,7 +5,7 @@ import math
 Allows for easy bicycle model math.
 """
 class Bicycle:
-    def __init__(self, wheelbase: float, radius: float) -> None:
+    def __init__(self, radius: float, wheelbase: float) -> None:
         self.wheelbase = wheelbase
         self.radius = radius
 
