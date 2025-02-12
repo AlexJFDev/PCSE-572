@@ -12,6 +12,9 @@ AXIS_TABLE: dict[str, tuple[float, float, float]] = {
     "z" : (0., 0., 1.)
 }
 
+"""
+This class allows for easy math and conversion between rotation matrices, quaternions, and axis angle.
+"""
 class Rotation:
     axis: float
     angle: float
