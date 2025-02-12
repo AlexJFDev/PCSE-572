@@ -7,6 +7,7 @@ from quaternion import Quaternion
 from transform import Transformation
 
 ANGLES = [pi / 2, pi / 3, pi / 4, pi / 6, -pi / 3, -pi / 6]
+ANGLES = [pi / 3]
 AXES = ["x", "y", "z"]
 
 if __name__ == "__main__":
