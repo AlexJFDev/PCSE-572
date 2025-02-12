@@ -156,7 +156,7 @@ class Rotation:
         x, y, z = axis
 
         angle_cos = math.cos(angle_radians / 2)
-        angle_sin = math.cos(angle_radians / 2)
+        angle_sin = math.sin(angle_radians / 2)
 
         w = angle_cos
         x_ = x * angle_sin
