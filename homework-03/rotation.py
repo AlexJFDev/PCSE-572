@@ -23,7 +23,7 @@ class Rotation:
             axis: Optional[str|list[int|float]]=None,
             angle: Optional[int|float]=None,
             rotation_matrix: Optional[np.ndarray[int|float, int|float]]=None,
-            rotation_quaternion: Optional[Quaternion]=None, 
+            rotation_quaternion: Optional[Quaternion|list[int|float]|tuple[int|float]]=None, 
             radians: bool=True
         ) -> None:
         """
@@ -48,7 +48,8 @@ class Rotation:
         # Rotation matrix
         elif (rotation_matrix is not None) and (axis is None and angle is None and rotation_quaternion is None):
             self.rotation_matrix = Rotation.__validate_rotation_matrix(rotation_matrix)
-            raise NotImplementedError("TODO")
+            self.axis, self.angle = Rotation.__rotation_matrix_to_axis_angle(self.rotation_matrix)
+            self.rotation_quaternion = Rotation.__axis_angle_to_rotation_quaternion(self.axis, self.angle, radians=radians)
         # Quaternion
         elif (rotation_quaternion is not None) and (axis is None and angle is None and rotation_matrix is None):
             self.rotation_quaternion = Rotation.__validate_rotation_quaternion(rotation_quaternion)
@@ -96,7 +97,7 @@ class Rotation:
         elif isinstance(rotation_matrix, np.ndarray):
             if rotation_matrix.shape != (3, 3):
                 raise ValueError("rotation_matrix should be of shape (3, 3)")
-            if np.issubdtype(rotation_matrix.dtype, np.integer) or np.issubdtype(rotation_matrix.dtype, np.floating):
+            if not(np.issubdtype(rotation_matrix.dtype, np.integer) or np.issubdtype(rotation_matrix.dtype, np.floating)):
                 raise ValueError("rotation_matrix should be of floating point or integer numbers")
         else:
             raise ValueError("rotation_matrix should be a list or tuple or a numpy array")
@@ -154,8 +155,8 @@ class Rotation:
             angle_radians = math.radians(angle)
         x, y, z = axis
 
-        angle_cos = math.cos(2 / angle_radians)
-        angle_sin = math.cos(2 / angle_radians)
+        angle_cos = math.cos(angle_radians / 2)
+        angle_sin = math.cos(angle_radians / 2)
 
         w = angle_cos
         x_ = x * angle_sin
@@ -182,5 +183,18 @@ class Rotation:
             axis = (1, 0, 0)
         else:
             axis = (x_q / angle_sin, y_q / angle_sin, z_q / angle_sin)
+
+        return axis, angle
+    
+    def __rotation_matrix_to_axis_angle(rotation_matrix: np.ndarray[float, float]) -> tuple[tuple[float, float, float], float]:
+        trace = rotation_matrix[0][0] + rotation_matrix[1][1] + rotation_matrix[2][2]
+        angle = math.acos((trace - 1) / 2)
+
+        if math.isclose(angle, 0):
+            axis = (1, 0, 0)
+        else:
+            factor = 1 / (2 * math.sin(angle))
+            axis = (rotation_matrix[2][1] - rotation_matrix[1][2], rotation_matrix[0][2] - rotation_matrix[2][0], rotation_matrix[1][0] - rotation_matrix[0][1])
+            axis = (axis[0] * factor, axis[1] * factor, axis[2] * factor)
 
         return axis, angle
